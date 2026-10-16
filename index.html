@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>XV Trini · 11.12.2026</title>
+<meta name="theme-color" content="#000000">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: dark;
+  --black:#000000;
+  --night:#060a14;
+  --gold:#c9a35a;
+  --gold-soft:#e6cf9c;
+  --gold-dim:rgba(201,163,90,.35);
+  --ink:#f1ece2;
+  --ink-dim:rgba(241,236,226,.62);
+  --serif:"Bodoni Moda","Didot","Bodoni 72","Times New Roman",serif;
+  --sans:"Jost","Futura","Century Gothic","Avenir Next",system-ui,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  background:var(--black);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --black:#000000; --ink:#f1ece2; }
+}
+:root[data-theme="dark"]{ --black:#000000; --ink:#f1ece2; }
+html{ scroll-padding-top:env(safe-area-inset-top,0px); }
+*,*::before,*::after{ box-sizing:inherit; margin:0; padding:0; }
+html,body{ height:100%; }
+body{
+  background:var(--black); color:var(--ink);
+  font-family:var(--sans); font-weight:300;
+  -webkit-font-smoothing:antialiased; overflow:hidden;
+}
+svg{ display:block; max-width:100%; }
+
+/* ---------- Contenedor de pantallas ---------- */
+.deck{
+  height:100%; overflow-y:auto; overflow-x:hidden;
+  scroll-snap-type:y mandatory; scroll-behavior:smooth;
+  overscroll-behavior:contain;
+}
+.screen{
+  position:relative; height:100%; min-height:560px;
+  scroll-snap-align:start; scroll-snap-stop:always;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; padding:3.5rem 1.75rem; overflow:hidden;
+  isolation:isolate;
+}
+.inner{ position:relative; z-index:2; width:100%; max-width:26rem; }
+
+/* reveal al entrar */
+.screen .rv{ opacity:0; transform:translateY(14px); transition:opacity 1s ease, transform 1s ease; }
+.screen.in .rv{ opacity:1; transform:none; }
+.screen.in .rv:nth-child(2){ transition-delay:.12s }
+.screen.in .rv:nth-child(3){ transition-delay:.24s }
+.screen.in .rv:nth-child(4){ transition-delay:.36s }
+.screen.in .rv:nth-child(5){ transition-delay:.48s }
+
+/* ---------- Tipografía ---------- */
+.kicker{
+  font-family:var(--sans); font-weight:400; font-size:.72rem;
+  letter-spacing:.42em; text-transform:uppercase; color:var(--gold);
+  padding-left:.42em;
+}
+.title{
+  font-family:var(--serif); font-weight:400; font-size:clamp(1.6rem,7vw,2.15rem);
+  line-height:1.15; letter-spacing:.06em; text-transform:uppercase; color:var(--ink);
+}
+.body{
+  font-size:1rem; line-height:1.65; color:var(--ink-dim); max-width:22rem; margin-inline:auto;
+}
+.rule{
+  width:3.5rem; height:1px; margin:1.6rem auto; border:0;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+
+/* ---------- Botones ---------- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:.6rem;
+  min-height:3rem; padding:.85rem 1.8rem; margin-top:2rem;
+  font-family:var(--sans); font-weight:500; font-size:.74rem;
+  letter-spacing:.32em; text-transform:uppercase; text-decoration:none;
+  color:var(--gold-soft); background:transparent;
+  border:1px solid var(--gold-dim); border-radius:999px; cursor:pointer;
+  transition:background .3s, color .3s, border-color .3s;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn:hover,.btn:active{ background:var(--gold); color:var(--black); border-color:var(--gold); }
+.btn:focus-visible{ outline:2px solid var(--gold-soft); outline-offset:4px; }
+.btn svg{ width:1rem; height:1rem; flex:none; }
+
+/* ---------- Skyline ---------- */
+.sky{
+  position:absolute; inset:0; z-index:0;
+  background:
+    radial-gradient(120% 60% at 50% 100%, rgba(201,163,90,.16), transparent 60%),
+    linear-gradient(180deg, var(--black) 0%, var(--night) 55%, #0b0f19 100%);
+}
+.skyline{ position:absolute; left:50%; bottom:0; transform:translateX(-50%); width:max(100%,560px); height:auto; }
+.skyline .win{ fill:var(--gold); }
+.skyline .win.tw{ animation:twinkle var(--d,6s) ease-in-out var(--dl,0s) infinite; }
+@keyframes twinkle{ 0%,100%{opacity:var(--o,.8)} 50%{opacity:.08} }
+.haze{ position:absolute; inset:auto 0 0 0; height:30%; background:linear-gradient(0deg,rgba(0,0,0,.9),transparent); z-index:1; }
+
+/* destellos */
+.spark{ position:absolute; width:3px; height:3px; border-radius:50%; background:var(--gold-soft);
+  box-shadow:0 0 8px 2px rgba(230,207,156,.6); opacity:0; animation:spark 7s ease-in-out infinite; z-index:1; }
+@keyframes spark{ 0%,100%{opacity:0; transform:scale(.4)} 45%{opacity:.9; transform:scale(1)} 60%{opacity:0} }
+
+/* ---------- 1 Portada ---------- */
+.cover .name{ margin:.3rem auto 1.1rem; }
+.xv{
+  font-family:var(--serif); font-style:italic; font-weight:400;
+  font-size:clamp(2.5rem,11vw,3.3rem); line-height:1; color:var(--gold); letter-spacing:.18em; padding-left:.18em;
+}
+.name{
+  font-family:var(--serif); font-weight:500;
+  width:fit-content; margin-inline:auto; padding-inline:.06em;
+  font-size:clamp(4.4rem,25vw,9rem); line-height:.95; letter-spacing:.04em;
+  color:transparent;
+  background:linear-gradient(175deg,#f7ecd0 0%,#d9b672 38%,#a77d35 62%,#e9d29e 100%);
+  -webkit-background-clip:text; background-clip:text;
+  margin:.6rem auto 1.4rem;
+  filter:drop-shadow(0 6px 30px rgba(201,163,90,.22));
+}
+.cover-date{ font-size:.78rem; letter-spacing:.45em; padding-left:.45em; color:var(--ink); text-transform:uppercase; font-weight:400; }
+.cover-date span{ color:var(--gold); }
+.hint{
+  position:absolute; bottom:1.4rem; left:50%; transform:translateX(-50%); z-index:3;
+  font-size:.62rem; letter-spacing:.4em; padding-left:.4em; text-transform:uppercase; color:var(--ink-dim);
+  display:flex; flex-direction:column; align-items:center; gap:.6rem;
+}
+.hint i{ display:block; width:1px; height:2.2rem; background:linear-gradient(var(--gold),transparent); animation:drip 2.4s ease-in-out infinite; transform-origin:top; }
+@keyframes drip{ 0%{transform:scaleY(0)} 50%{transform:scaleY(1)} 100%{transform:scaleY(1); opacity:0} }
+
+/* ---------- 2 Fecha ---------- */
+.bigdate{
+  font-family:var(--serif); font-weight:400; font-size:clamp(3.2rem,17vw,5.4rem);
+  line-height:1; letter-spacing:-.01em; color:var(--ink); margin-top:1.4rem;
+  display:flex; justify-content:center; align-items:baseline; gap:.06em;
+}
+.bigdate .dot{ color:var(--gold); }
+.yr{ display:block; font-family:var(--serif); font-size:clamp(1.3rem,7vw,2.2rem); letter-spacing:.35em; padding-left:.35em; color:var(--gold); margin-top:.6rem; }
+.weekday{ font-family:var(--serif); font-style:italic; font-size:1.35rem; color:var(--gold-soft); margin-top:1rem; letter-spacing:.06em; }
+.count{
+  display:grid; grid-template-columns:repeat(4,1fr); margin-top:2.4rem;
+  border-top:1px solid var(--gold-dim); border-bottom:1px solid var(--gold-dim);
+}
+.count div{ padding:1rem .2rem .9rem; }
+.count div + div{ border-left:1px solid rgba(201,163,90,.18); }
+.count b{ display:block; font-family:var(--serif); font-weight:400; font-size:clamp(1.7rem,8vw,2.3rem); color:var(--ink); font-variant-numeric:tabular-nums lining-nums; }
+.count small{ display:block; margin-top:.35rem; font-size:.56rem; letter-spacing:.3em; padding-left:.3em; color:var(--gold); text-transform:uppercase; }
+.count-done{ margin-top:2.4rem; font-family:var(--serif); font-style:italic; font-size:1.4rem; color:var(--gold-soft); }
+
+/* ---------- 3 Lugar ---------- */
+.grid-map{ position:absolute; inset:0; z-index:0; opacity:.55; }
+.grid-map svg{ width:100%; height:100%; }
+.venue{ font-family:var(--serif); font-weight:500; font-size:clamp(1.9rem,9vw,2.6rem); line-height:1.1; letter-spacing:.04em; color:var(--ink); margin-top:1.6rem; text-transform:uppercase; }
+.addr{ margin-top:1rem; font-size:1rem; line-height:1.6; color:var(--ink-dim); letter-spacing:.06em; }
+.time{ margin-top:1.8rem; font-family:var(--serif); font-size:2.6rem; color:var(--gold); letter-spacing:.02em; }
+.time small{ font-family:var(--sans); font-size:.8rem; letter-spacing:.3em; margin-left:.3rem; color:var(--gold-soft); }
+.pin{ width:2.2rem; height:2.2rem; margin:0 auto; }
+
+/* ---------- 4 Dress code ---------- */
+.dress-art{ width:min(15rem,62vw); margin:0 auto 1.4rem; }
+.dress-art path,.dress-art line,.dress-art circle{ fill:none; stroke:var(--gold); stroke-width:1.1; stroke-linecap:round; stroke-linejoin:round; }
+.elegante{ font-family:var(--serif); font-style:italic; font-size:clamp(2.8rem,14vw,4rem); line-height:1; color:var(--ink); margin:.8rem 0 1rem; }
+.shine{ font-family:var(--serif); font-size:1.15rem; color:var(--gold-soft); letter-spacing:.04em; }
+.avoid{ margin-top:2rem; padding-top:1.4rem; border-top:1px solid rgba(201,163,90,.2); }
+.avoid p{ font-size:.92rem; line-height:1.6; color:var(--ink-dim); }
+.swatches{ display:flex; justify-content:center; gap:1.4rem; margin-top:1rem; }
+.sw{ display:flex; flex-direction:column; align-items:center; gap:.45rem; font-size:.6rem; letter-spacing:.25em; padding-left:.25em; text-transform:uppercase; color:var(--ink-dim); }
+.sw i{ position:relative; display:block; width:1.6rem; height:1.6rem; border-radius:50%; border:1px solid rgba(255,255,255,.25); overflow:hidden; }
+.sw i::after{ content:""; position:absolute; left:50%; top:-20%; width:1px; height:140%; background:#fff; transform:rotate(45deg); box-shadow:0 0 0 .5px #000; }
+
+/* ---------- 5 Fotos ---------- */
+.qr-frame{
+  position:relative; width:min(15.5rem,66vw); aspect-ratio:1; margin:2rem auto 0;
+  background:#fff; border-radius:6px; display:grid; place-items:center;
+  box-shadow:0 0 0 1px var(--gold), 0 0 0 9px var(--black), 0 0 0 10px var(--gold-dim), 0 20px 60px rgba(201,163,90,.15);
+}
+.qr-frame span{ font-size:.66rem; letter-spacing:.3em; padding-left:.3em; color:#8a8170; text-transform:uppercase; line-height:1.8; }
+.qr-frame img{ width:90%; height:90%; object-fit:contain; image-rendering:pixelated; }
+.tag{ margin-top:1.8rem; font-family:var(--serif); font-size:1.5rem; letter-spacing:.12em; color:var(--gold); }
+
+/* ---------- 6 Regalo ---------- */
+.gift-lead{ font-family:var(--serif); font-weight:400; font-size:clamp(1.7rem,8vw,2.3rem); line-height:1.2; letter-spacing:.04em; text-transform:uppercase; }
+.alias{
+  margin-top:1.8rem; padding:1.1rem 1rem; border:1px solid var(--gold-dim); border-radius:4px;
+}
+.alias small{ display:block; font-size:.6rem; letter-spacing:.4em; padding-left:.4em; color:var(--gold); text-transform:uppercase; }
+.alias strong{ display:block; margin-top:.5rem; font-family:var(--sans); font-weight:400; font-size:1.2rem; letter-spacing:.12em; color:var(--ink); word-break:break-all; }
+.toast{ height:1.2rem; margin-top:.9rem; font-size:.8rem; color:var(--gold-soft); letter-spacing:.08em; opacity:0; transition:opacity .4s; }
+.toast.on{ opacity:1; }
+
+/* ---------- 7 Cierre ---------- */
+
+.thanks{ font-family:var(--serif); font-weight:400; font-size:clamp(1.35rem,6.2vw,1.8rem); line-height:1.4; letter-spacing:.05em; text-transform:uppercase; }
+.see-you{ margin-top:1.4rem; font-size:.78rem; line-height:1.9; letter-spacing:.32em; padding-left:.32em; color:var(--gold-soft); text-transform:uppercase; }
+.sign{ margin-top:2.2rem; font-family:var(--serif); }
+.sign em{ display:block; font-size:1.2rem; color:var(--gold); letter-spacing:.2em; padding-left:.2em; }
+.sign b{ display:block; width:fit-content; margin-inline:auto; padding-inline:.06em; font-weight:500; font-size:clamp(3rem,16vw,4.6rem); line-height:1; letter-spacing:.06em;
+  color:transparent; background:linear-gradient(175deg,#f7ecd0,#d9b672 45%,#a77d35 70%,#e9d29e); -webkit-background-clip:text; background-clip:text; }
+
+/* ---------- Fotos de fondo ---------- */
+.photo{ position:absolute; inset:0; z-index:0; background-size:cover; background-repeat:no-repeat; }
+.cover .photo{ background-image:url(portada.jpg); background-position:50% 12%; }
+.cover .photo::after{ content:""; position:absolute; inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 18%,rgba(0,0,0,.05) 40%,rgba(0,0,0,.75) 62%,#000 80%); }
+.cover .sky{ background:none; }
+.cover .skyline{ opacity:.85; transform:translateX(-50%) scale(.62); transform-origin:50% 100%; }
+.cover{ justify-content:flex-end; padding-bottom:7rem; }
+.closing .photo{ background-image:url(cierre.jpg); background-position:50% 32%; }
+.closing .photo::after{ content:""; position:absolute; inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,.1) 25%,rgba(0,0,0,.2) 45%,rgba(0,0,0,.85) 65%,#000 82%); }
+.closing{ justify-content:flex-end; padding-bottom:3.5rem; }
+
+/* ---------- Asistencia ---------- */
+.rsvp-mark{ font-family:var(--serif); font-style:italic; font-size:clamp(3.6rem,18vw,5.4rem); line-height:1; color:var(--gold); margin-bottom:1rem; }
+.btn.solid{ background:var(--gold); color:var(--black); border-color:var(--gold); }
+.btn.solid:hover,.btn.solid:active{ background:var(--gold-soft); border-color:var(--gold-soft); }
+.or{ margin-top:1.4rem; font-size:.8rem; color:var(--ink-dim); letter-spacing:.06em; }
+.or + .btn{ margin-top:.8rem; }
+
+/* ---------- Datos de regalo ---------- */
+.pay{ margin-top:1.8rem; border:1px solid var(--gold-dim); border-radius:4px; text-align:left; }
+.pay-row{ display:flex; align-items:center; gap:.8rem; padding:.95rem 1rem; }
+.pay-row + .pay-row{ border-top:1px solid rgba(201,163,90,.16); }
+.pay-row div{ flex:1; min-width:0; }
+.pay-row small{ display:block; font-size:.58rem; letter-spacing:.38em; color:var(--gold); text-transform:uppercase; }
+.pay-row strong{ display:block; margin-top:.3rem; font-weight:400; color:var(--ink); letter-spacing:.06em; overflow-wrap:anywhere; }
+.pay-row .big{ font-size:1.2rem; letter-spacing:.1em; }
+.pay-row .mono{ font-size:.92rem; font-variant-numeric:tabular-nums; letter-spacing:.04em; }
+.copy{ flex:none; width:2.6rem; height:2.6rem; display:grid; place-items:center; border-radius:50%;
+  border:1px solid var(--gold-dim); background:transparent; color:var(--gold-soft); cursor:pointer; transition:background .3s,color .3s; }
+.copy:hover,.copy:active{ background:var(--gold); color:var(--black); }
+.copy:focus-visible{ outline:2px solid var(--gold-soft); outline-offset:3px; }
+.copy svg{ width:1rem; height:1rem; }
+.gift .btn{ margin-top:1.4rem; }
+.gift .gift-lead{ font-size:clamp(1.45rem,6.6vw,2rem); }
+.gift .rule{ margin:1.1rem auto; }
+
+/* ---------- Indicador lateral ---------- */
+.dots{ position:fixed; right:.9rem; top:50%; transform:translateY(-50%); z-index:20; display:flex; flex-direction:column; gap:.7rem; }
+.dots button{ width:6px; height:6px; padding:0; border-radius:50%; border:1px solid var(--gold-dim); background:transparent; cursor:pointer; transition:all .35s; }
+.dots button[aria-current="true"]{ background:var(--gold); border-color:var(--gold); height:18px; border-radius:3px; }
+.dots button:focus-visible{ outline:2px solid var(--gold-soft); outline-offset:3px; }
+
+@media (min-width:700px){
+  .screen{ padding-inline:3rem; }
+}
+@media (prefers-reduced-motion: reduce){
+  .deck{ scroll-behavior:auto; }
+  .skyline .win.tw,.spark,.hint i{ animation:none !important; }
+  .spark{ opacity:.5; }
+  .screen .rv{ opacity:1; transform:none; transition:none; }
+}
+</style>
+</head>
+<body>
+
+<nav class="dots" aria-label="Pantallas"></nav>
+
+<main class="deck" id="deck">
+
+  <!-- 1 PORTADA -->
+  <section class="screen cover" aria-label="Portada">
+    <div class="photo" role="img" aria-label="Retrato de Trini"></div>
+    <div class="sky"><svg class="skyline" data-seed="7" viewBox="0 0 600 420" preserveAspectRatio="xMidYMax meet" aria-hidden="true"></svg></div>
+    <div class="haze"></div>
+    <div class="sparks" aria-hidden="true"></div>
+    <div class="inner">
+      <div class="xv rv">XV</div>
+      <h1 class="name rv">TRINI</h1>
+      <p class="cover-date rv">Viernes <span>11 · 12 · 2026</span></p>
+    </div>
+    <div class="hint" aria-hidden="true">Deslizá<i></i></div>
+  </section>
+
+  <!-- 2 FECHA -->
+  <section class="screen" aria-label="La fecha">
+    <div class="inner">
+      <p class="kicker rv">Save the date</p>
+      <div class="rv">
+        <div class="bigdate">11<span class="dot">.</span>12</div>
+        <span class="yr">2026</span>
+      </div>
+      <p class="weekday rv">Viernes</p>
+      <div class="rv" id="countWrap">
+        <div class="count" role="timer" aria-live="off">
+          <div><b id="cd-d">--</b><small>Días</small></div>
+          <div><b id="cd-h">--</b><small>Horas</small></div>
+          <div><b id="cd-m">--</b><small>Min</small></div>
+          <div><b id="cd-s">--</b><small>Seg</small></div>
+        </div>
+      </div>
+      <div class="rv">
+        <a class="btn" id="calBtn" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="1.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>
+          Agendar fecha
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 LUGAR -->
+  <section class="screen" aria-label="El lugar">
+    <div class="grid-map" aria-hidden="true">
+      <svg viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <radialGradient id="fade" cx="50%" cy="50%" r="60%"><stop offset="0" stop-color="#000" stop-opacity=".85"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+          <pattern id="streets" width="34" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(29)">
+            <path d="M0 0H34M0 0V14" stroke="#c9a35a" stroke-opacity=".16" stroke-width=".6"/>
+          </pattern>
+        </defs>
+        <rect width="400" height="800" fill="url(#streets)"/>
+        <path d="M-20 120 C 90 260, 160 380, 230 520 S 330 760, 420 860" stroke="#c9a35a" stroke-opacity=".5" stroke-width="1.2" fill="none"/>
+        <rect x="150" y="300" width="70" height="150" transform="rotate(29 185 375)" fill="none" stroke="#c9a35a" stroke-opacity=".28" stroke-dasharray="2 4"/>
+        <rect width="400" height="800" fill="url(#fade)"/>
+      </svg>
+    </div>
+    <div class="inner">
+      <svg class="pin rv" viewBox="0 0 24 24" fill="none" stroke="#c9a35a" stroke-width="1.2" aria-hidden="true"><path d="M12 21s-6.5-6.2-6.5-11.2a6.5 6.5 0 0 1 13 0C18.5 14.8 12 21 12 21z"/><circle cx="12" cy="9.8" r="2.2"/></svg>
+      <p class="kicker rv" style="margin-top:1.2rem">Nos encontramos en…</p>
+      <h2 class="venue rv">Gran Córdoba<br>Eventos</h2>
+      <p class="addr rv">Avda. Córdoba 4460<br>CABA</p>
+      <p class="time rv">21:30<small>HS</small></p>
+      <div class="rv">
+        <a class="btn" target="_blank" rel="noopener"
+           href="https://www.google.com/maps/search/?api=1&query=Gran%20C%C3%B3rdoba%20Eventos%2C%20Av.%20C%C3%B3rdoba%204460%2C%20CABA">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M9 4 3.5 6v14L9 18l6 2 5.5-2V4L15 6 9 4zM9 4v14M15 6v14"/></svg>
+          ¿Cómo llegar?
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 DRESS CODE -->
+  <section class="screen" aria-label="Dress code">
+    <div class="inner">
+      <svg class="dress-art rv" viewBox="0 0 240 150" aria-hidden="true">
+        <!-- vestido -->
+        <path d="M78 22c0-6 4-10 9-10s9 4 9 10"/>
+        <path d="M80 32l-4 20h22l-4-20"/>
+        <path d="M80 32c3 3 11 3 14 0"/>
+        <path d="M76 52c-6 28-18 58-30 88h82c-12-30-24-60-30-88"/>
+        <path d="M87 70c-2 22-8 46-16 70" opacity=".5"/>
+        <!-- traje -->
+        <circle cx="160" cy="16" r="8"/>
+        <path d="M148 34l12 10 12-10"/>
+        <path d="M156 40l4 4 4-4-4 3z"/>
+        <path d="M144 34h32l4 52h-14l-2 54h-8l-2-54h-14z"/>
+        <path d="M160 44v30" opacity=".5"/>
+      </svg>
+      <p class="kicker rv">Dress code</p>
+      <p class="elegante rv">Elegante</p>
+      <p class="shine rv">Una noche para brillar.</p>
+      <div class="avoid rv">
+        <p>Te pedimos, por favor, evitar estos colores:</p>
+        <div class="swatches">
+          <div class="sw"><i style="background:#c9a35a"></i>Dorado</div>
+          <div class="sw"><i style="background:#f4f1ec"></i>Blanco</div>
+          <div class="sw"><i style="background:#e8a7bb"></i>Rosa</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 ASISTENCIA -->
+  <section class="screen" aria-label="Confirmar asistencia">
+    <div class="inner">
+      <p class="rsvp-mark rv">R.S.V.P.</p>
+      <h2 class="title rv">Confirmá tu asistencia</h2>
+      <p class="body rv" style="margin-top:1.1rem">Contame si venís completando este breve formulario. ¡Me ayuda mucho a organizar la noche!</p>
+      <div class="rv">
+        <a class="btn solid" target="_blank" rel="noopener" href="https://docs.google.com/forms/d/1UWuFSUB6I08DU9rAWBxNk6FylRx_5ENt55ks8WcXiV8/viewform">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+          Confirmar asistencia
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 FOTOS -->
+  <section class="screen" aria-label="Compartamos este momento">
+    <div class="inner">
+      <h2 class="title rv">Una noche que no olvidaremos</h2>
+      <p class="body rv" style="margin-top:1.1rem">Escaneá el QR desde otro celular y subí las fotos que saques durante esta noche especial.</p>
+      <div class="qr-frame rv" id="qr">
+        <img src="qr.png" alt="Código QR de la carpeta para subir fotos">
+      </div>
+      <p class="tag rv">#XVTRINI</p>
+      <div class="rv">
+        <a class="btn" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1iMEojemtyJYfFaUP2j1I3ARxRQJkBeOk">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M12 15V4M7.5 8.5 12 4l4.5 4.5M4.5 14v4.5A1.5 1.5 0 0 0 6 20h12a1.5 1.5 0 0 0 1.5-1.5V14"/></svg>
+          Subir fotos
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 REGALO -->
+  <section class="screen gift" aria-label="Regalo">
+    <div class="inner">
+      <p class="gift-lead rv">Tu presencia es mi mayor regalo.</p>
+      <hr class="rule rv">
+      <p class="body rv">Pero si deseás hacerme un regalo, te dejo mis datos para transferencia:</p>
+      <div class="pay rv">
+        <div class="pay-row"><div><small>Alias</small><strong class="big">trini-alonso</strong></div>
+          <button class="copy" type="button" data-copy="trini-alonso" data-label="Alias" aria-label="Copiar alias"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="1.5"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"/></svg></button></div>
+        <div class="pay-row"><div><small>CVU</small><strong class="mono">0000003100035071221766</strong></div>
+          <button class="copy" type="button" data-copy="0000003100035071221766" data-label="CVU" aria-label="Copiar CVU"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="1.5"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"/></svg></button></div>
+        <div class="pay-row"><div><small>Titular</small><strong>Trinidad Lucia Alonso</strong></div></div>
+      </div>
+      <p class="toast" id="toast" role="status"></p>
+      <div class="rv">
+        <a class="btn" target="_blank" rel="noopener" href="https://mpago.la/1K17TB" style="margin-top:.4rem">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+          Ir a Mercado Pago
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 CIERRE -->
+  <section class="screen closing" aria-label="Cierre">
+    <div class="photo" role="img" aria-label="Trini de noche en la ciudad"></div>
+    <div class="sparks" aria-hidden="true"></div>
+    <div class="inner">
+      <p class="thanks rv">Gracias por ser parte de este momento tan especial.</p>
+      <p class="see-you rv">Te espero para celebrar<br>juntos mis XV</p>
+      <div class="sign rv"><em>XV</em><b>TRINI</b></div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+(function(){
+  /* ===== EDITAR ACÁ ===== */
+  var EVENT_START = new Date("2026-12-11T21:30:00-03:00");
+  /* ====================== */
+
+
+  // ---- Skyline generado (estilo Manhattan) ----
+  function rng(seed){ return function(){ seed = (seed*16807) % 2147483647; return (seed-1)/2147483646; }; }
+  var NS = "http://www.w3.org/2000/svg";
+  function el(tag, attrs, parent){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); parent.appendChild(e); return e; }
+
+  document.querySelectorAll(".skyline").forEach(function(svg){
+    var r = rng(parseInt(svg.dataset.seed,10)||1);
+    var W=600, H=420;
+    // capa lejana
+    var far = el("g",{fill:"#0d1322"},svg);
+    for(var x=-10; x<W; ){
+      var w=18+r()*34, h=90+r()*140;
+      el("rect",{x:x,y:H-h,width:w,height:h},far);
+      x+=w-2;
+    }
+    // capa cercana con ventanas
+    var near = el("g",{},svg);
+    var wins = el("g",{},svg);
+    var x=-6;
+    var landmark = 200 + Math.floor(r()*160);
+    while(x<W){
+      var w=26+r()*46, h=110+r()*170;
+      if(x<landmark && x+w>landmark){ // torre tipo Empire State
+        w=46; h=330; var cx=x+w/2;
+        el("path",{d:"M"+x+" "+H+"V"+(H-230)+"h6v-30h8v-30h18v30h8v30h6V"+H+"z",fill:"#05070d"},near);
+        el("path",{d:"M"+(cx-5)+" "+(H-290)+"h10v-28h-3v-14h-4v14h-3z",fill:"#05070d"},near);
+        el("line",{x1:cx,y1:H-332,x2:cx,y2:H-360,stroke:"#c9a35a","stroke-width":".8","stroke-opacity":".8"},near);
+        el("circle",{cx:cx,cy:H-361,r:1.6,fill:"#e6cf9c"},near);
+        h=230;
+      } else {
+        var shape = r();
+        if(shape<.25){
+          el("path",{d:"M"+x+" "+H+"V"+(H-h)+"L"+(x+w/2)+" "+(H-h-18-r()*20)+"L"+(x+w)+" "+(H-h)+"V"+H+"z",fill:"#05070d"},near);
+        } else {
+          el("rect",{x:x,y:H-h,width:w,height:h,fill:"#05070d"},near);
+          if(shape>.8) el("rect",{x:x+w*.25,y:H-h-14,width:w*.5,height:14,fill:"#05070d"},near);
+        }
+      }
+      // ventanas
+      for(var wy=H-h+10; wy<H-6; wy+=9){
+        for(var wx=x+5; wx<x+w-6; wx+=7){
+          var p=r();
+          if(p<.22){
+            var o=(.25+r()*.7).toFixed(2);
+            var rect=el("rect",{x:wx.toFixed(1),y:wy,width:2.6,height:4,class:"win",opacity:o},wins);
+            if(r()<.12){ rect.classList.add("tw"); rect.style.setProperty("--o",o); rect.style.setProperty("--d",(4+r()*7).toFixed(1)+"s"); rect.style.setProperty("--dl",(-r()*8).toFixed(1)+"s"); }
+          }
+        }
+      }
+      x+=w+(r()*3);
+    }
+  });
+
+  // ---- Destellos dorados ----
+  document.querySelectorAll(".sparks").forEach(function(box, i){
+    var r=rng(31+i*7);
+    for(var k=0;k<9;k++){
+      var s=document.createElement("i"); s.className="spark";
+      s.style.left=(6+r()*88)+"%"; s.style.top=(6+r()*55)+"%";
+      s.style.animationDelay=(-r()*7).toFixed(1)+"s";
+      s.style.animationDuration=(6+r()*5).toFixed(1)+"s";
+      box.parentNode.appendChild(s);
+    }
+  });
+
+  // ---- Cuenta regresiva ----
+  var dE=document.getElementById("cd-d"), hE=document.getElementById("cd-h"),
+      mE=document.getElementById("cd-m"), sE=document.getElementById("cd-s");
+  function pad(n){ return n<10 ? "0"+n : ""+n; }
+  function tick(){
+    var diff = EVENT_START - new Date();
+    if(diff<=0){
+      document.getElementById("countWrap").innerHTML='<p class="count-done">¡Llegó la noche!</p>';
+      clearInterval(timer); return;
+    }
+    var s=Math.floor(diff/1000);
+    dE.textContent=Math.floor(s/86400);
+    hE.textContent=pad(Math.floor(s%86400/3600));
+    mE.textContent=pad(Math.floor(s%3600/60));
+    sE.textContent=pad(s%60);
+  }
+  var timer=setInterval(tick,1000); tick();
+
+  // ---- Agendar (Google Calendar) ----
+  var cal = "https://calendar.google.com/calendar/render?action=TEMPLATE"
+    + "&text=" + encodeURIComponent("XV de Trini")
+    + "&dates=20261212T003000Z/20261212T060000Z"
+    + "&details=" + encodeURIComponent("Dress code: elegante. Evitar dorado, blanco y rosa.")
+    + "&location=" + encodeURIComponent("Gran Córdoba Eventos, Av. Córdoba 4460, CABA");
+  document.getElementById("calBtn").href = cal;
+
+  // ---- Copiar alias ----
+  var toast=document.getElementById("toast");
+  function show(msg){ toast.textContent=msg; toast.classList.add("on"); setTimeout(function(){toast.classList.remove("on");},2400); }
+  function fallbackCopy(t){
+    var ta=document.createElement("textarea"); ta.value=t; ta.setAttribute("readonly","");
+    ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta);
+    ta.select(); ta.setSelectionRange(0,t.length);
+    var ok=false; try{ ok=document.execCommand("copy"); }catch(e){}
+    document.body.removeChild(ta); return ok;
+  }
+  document.querySelectorAll("[data-copy]").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      var t=btn.dataset.copy, ok=btn.dataset.label+" copiado", no="Mantené presionado el "+btn.dataset.label+" para copiarlo";
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(t).then(function(){ show(ok); },function(){ show(fallbackCopy(t)?ok:no); });
+      } else { show(fallbackCopy(t)?ok:no); }
+    });
+  });
+
+  // ---- Indicador y reveal ----
+  var deck=document.getElementById("deck");
+  var screens=[].slice.call(document.querySelectorAll(".screen"));
+  var nav=document.querySelector(".dots");
+  var btns=screens.map(function(sc,i){
+    var b=document.createElement("button"); b.type="button";
+    b.setAttribute("aria-label","Ir a "+sc.getAttribute("aria-label"));
+    b.addEventListener("click",function(){ sc.scrollIntoView({behavior:"smooth"}); });
+    nav.appendChild(b); return b;
+  });
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){
+        en.target.classList.add("in");
+        var i=screens.indexOf(en.target);
+        btns.forEach(function(b,j){ b.setAttribute("aria-current", j===i ? "true":"false"); });
+      }
+    });
+  },{root:deck, threshold:.55});
+  screens.forEach(function(s){ io.observe(s); });
+  screens[0].classList.add("in");
+})();
+</script>
+</body>
+</html>
