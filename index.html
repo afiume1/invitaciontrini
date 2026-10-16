@@ -113,6 +113,15 @@ svg{ display:block; max-width:100%; }
   box-shadow:0 0 8px 2px rgba(230,207,156,.6); opacity:0; animation:spark 7s ease-in-out infinite; z-index:1; }
 @keyframes spark{ 0%,100%{opacity:0; transform:scale(.4)} 45%{opacity:.9; transform:scale(1)} 60%{opacity:0} }
 
+/* estrellitas en pantallas negras */
+.stars{ position:absolute; inset:0; z-index:1; pointer-events:none; }
+.star{ position:absolute; color:var(--gold); opacity:var(--o,.7);
+  filter:drop-shadow(0 0 3px rgba(230,207,156,.55));
+  animation:starTw var(--d,5s) ease-in-out var(--dl,0s) infinite; }
+.star svg{ width:100%; height:100%; }
+.star.dot{ border-radius:50%; background:var(--gold-soft); }
+@keyframes starTw{ 0%,100%{opacity:var(--o,.7); transform:scale(1) rotate(0)} 50%{opacity:.15; transform:scale(.6) rotate(20deg)} }
+
 /* ---------- 1 Portada ---------- */
 .cover .name{ margin:.3rem auto 1.1rem; }
 .xv{
@@ -257,7 +266,7 @@ svg{ display:block; max-width:100%; }
 }
 @media (prefers-reduced-motion: reduce){
   .deck{ scroll-behavior:auto; }
-  .skyline .win.tw,.spark,.hint i{ animation:none !important; }
+  .skyline .win.tw,.spark,.star,.hint i{ animation:none !important; }
   .spark{ opacity:.5; }
   .screen .rv{ opacity:1; transform:none; transition:none; }
 }
@@ -505,6 +514,28 @@ svg{ display:block; max-width:100%; }
       s.style.animationDuration=(6+r()*5).toFixed(1)+"s";
       box.parentNode.appendChild(s);
     }
+  });
+
+  // ---- Estrellitas doradas (pantallas sin foto) ----
+  var STAR='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C12.8 8 16 11.2 24 12 16 12.8 12.8 16 12 24 11.2 16 8 12.8 0 12 8 11.2 11.2 8 12 0Z"/></svg>';
+  document.querySelectorAll(".screen:not(.cover):not(.closing)").forEach(function(sec, i){
+    var r=rng(101+i*13), box=document.createElement("div");
+    box.className="stars"; box.setAttribute("aria-hidden","true");
+    for(var k=0;k<22;k++){
+      var s=document.createElement("i"), big=r()<.4;
+      // más densas hacia los bordes para no tapar el texto
+      var x=r(), y=r();
+      if(r()<.7){ x = x<.5 ? x*.36 : .64+x*.36; }
+      s.className = big ? "star" : "star dot";
+      if(big){ var sz=(7+r()*9).toFixed(0); s.innerHTML=STAR; s.style.width=s.style.height=sz+"px"; }
+      else { var d=(1.5+r()*1.8).toFixed(1); s.style.width=s.style.height=d+"px"; }
+      s.style.left=(3+x*94)+"%"; s.style.top=(3+y*94)+"%";
+      s.style.setProperty("--o",(.35+r()*.55).toFixed(2));
+      s.style.setProperty("--d",(3.5+r()*5).toFixed(1)+"s");
+      s.style.setProperty("--dl",(-r()*8).toFixed(1)+"s");
+      box.appendChild(s);
+    }
+    sec.insertBefore(box, sec.firstChild);
   });
 
   // ---- Cuenta regresiva ----
